@@ -69,13 +69,31 @@ async function cancelUpdate(setUpdateData) {
   setUpdateData("");
 }
 
+async function SetUpdateData(id,title,status,setUpdateData)
+{
+  let newEntry={
+  id: id,
+  title: title,
+  status: status ? true : false,
+}
+setUpdateData(newEntry);
+};
+
+function CatchTitle(updateData)
+{
+let newEntry=updateData.title;
+return newEntry;
+};
+
+
 export default function DisplayToDos() {
   // Tasks (ToDo List) State
   const [toDo, setToDo] = useState([]);
 
   // Temp State
-  const [newTask, setNewTask] = useState("");
-  const [updateData, setUpdateData] = useState("");
+  const [newTask, setNewTask] = useState('');
+  const [updateData, setUpdateData] = useState('');
+  
 
   return (
     <div>
@@ -86,8 +104,8 @@ export default function DisplayToDos() {
             <div className="col">
               <input
                 maxLength={30}
-                value={updateData && updateData.title}
                 onChange={(e) => changeTask(e, setUpdateData, updateData)}
+                value={updateData && CatchTitle(updateData)}
                 className="form-control form-control-lg"
               />
             </div>
@@ -147,9 +165,8 @@ export default function DisplayToDos() {
               <div className="col tskBg">
                 <div className={task.status ? "done" : ""}>
                   <span className="taskNumber">{index + 1}</span>
-                  <span className="taskText">{task.title}</span>
-                  <span className="taskText">{task.dateAsOf}</span>
-                 
+                  <span className="taskText">{task.title}  <br/>Date : {task.dateAsOf} </span>
+                                  
                 </div>
                 <div className="iconWrap">
                   <span
@@ -162,13 +179,8 @@ export default function DisplayToDos() {
                     <span
                       title="Edit"
                       onClick={() =>
-                        setUpdateData({
-                          id: task.id,
-                          title: task.title,
-                          status: task.status ? true : false,
-                        })
-                      }
-                    >
+                        SetUpdateData(task.id,task.title,task.status,setUpdateData)}
+                      >
                       <FontAwesomeIcon icon={faPen} />
                     </span>
                   )}
